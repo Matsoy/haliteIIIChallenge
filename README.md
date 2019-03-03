@@ -7,7 +7,5 @@
 ```
 
 *Classement final* : :boom: [https://halite.io/user/?user_id=2817]: https://halite.io/user/?user_id=2817 :boom:
-- 146/4014 au niveau mondial :earth_americas: Top 4%
-- 2/111 au niveau FR :fr: Top 2%
-
-<span>&#x1f1e7;&#x1f1f7;</span>
+- Top 4% :earth_americas: : 146/4014 
+- Top 2% :fr: : 2/111
