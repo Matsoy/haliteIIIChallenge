@@ -1,4 +1,6 @@
-# V49 18/11/18 05:14
+##########################
+### Last submitted bot ###
+##########################
 
 #!/usr/bin/env python3
 # Python 3.6
@@ -8,7 +10,6 @@ import hlt
 
 import numpy as np
 import scipy.stats as st
-# from hlt import scipy
 
 # This library contains constant values.
 from hlt import constants, entity
@@ -146,25 +147,14 @@ def find_path_astar(maze, start, goal):
 
     return "o"
 
-def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, start, goal, start_position):
-    # logging.debug("get_direction_from_waze_recursive")
-    # logging.debug("maze \n" + str(maze))
-    # logging.debug("")
 
+def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, start, goal, start_position):
     # update parameters for the next loop
     new_maze_width = maze_width + 2
     new_maze_height = maze_height + 2
     new_origin = origin - Position(1, 1)
     new_start = (start[0] + 1, start[1] + 1)
     new_goal = (goal[0] + 1, goal[1] + 1)
-
-    # logging.debug("new_maze_width\t" + str(new_maze_width))
-    # logging.debug("new_maze_height\t" + str(new_maze_height))
-    # logging.debug("new_origin\t" + str(new_origin))
-    # logging.debug("new_start\t" + str(new_start))
-    # logging.debug("new_goal\t" + str(new_goal))
-
-    # logging.debug("__________")
 
     new_maze = np.append(
         maze,
@@ -197,7 +187,6 @@ def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, sta
     # the top line and the bottom line
     for i in range(0, new_maze_width):
         position_tmp1 = game_map.normalize(Position(new_origin.x + i, new_origin.y))
-        # logging.debug("Tour " + str(game.turn_number) +"\t("+ str(position_tmp1)+") ==>\t" + str(game_map[position_tmp1].is_occupied))
         if (
             game_map[position_tmp1].is_occupied
             or
@@ -207,12 +196,10 @@ def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, sta
                 in_enemy_area(position_tmp1)
             )
         ):
-            # logging.debug("\t2) SHIP")
             impossible = False
             new_maze[0][i] = 1
 
         position_tmp2 = game_map.normalize(Position(new_origin.x + i, new_origin.y + new_maze_height - 1))
-        # logging.debug("Tour " + str(game.turn_number) +"\t("+ str(position_tmp2)+") ==>\t" + str(game_map[position_tmp2].is_occupied))
         if (
             game_map[position_tmp2].is_occupied
             or
@@ -222,14 +209,12 @@ def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, sta
                 in_enemy_area(position_tmp2)
             )
         ):
-            # logging.debug("\t3) SHIP")
             impossible = False
             new_maze[new_maze_height - 1][i] = 1
 
     # the rest of the left column the right column
     for j in range(1, new_maze_height - 1):
         position_tmp1 = game_map.normalize(Position(new_origin.x, new_origin.y + j))
-        # logging.debug("Tour " + str(game.turn_number) +"\t("+ str(position_tmp1)+") ==>\t" + str(game_map[position_tmp1].is_occupied))
         if (
             game_map[position_tmp1].is_occupied
             or
@@ -239,12 +224,10 @@ def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, sta
                 in_enemy_area(position_tmp1)
             )
         ):
-            # logging.debug("\t4) SHIP")
             impossible = False
             new_maze[j][0] = 1
 
         position_tmp2 = game_map.normalize(Position(new_origin.x + new_maze_width - 1, new_origin.y + j))
-        # logging.debug("Tour " + str(game.turn_number) +"\t("+ str(position_tmp2)+") ==>\t" + str(game_map[position_tmp2].is_occupied))
         if (
             game_map[position_tmp2].is_occupied
             or
@@ -254,24 +237,14 @@ def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, sta
                 in_enemy_area(position_tmp2)
             )
         ):
-            # logging.debug("\t5) SHIP")
             impossible = False
             new_maze[j][new_maze_width - 1] = 1
     
-
-    # fill the matrix
-    # for line in new_maze:
-        # logging.debug(str(line))
-
     path = find_path_astar(
         new_maze, 
         new_start,
         new_goal
     )
-
-    # logging.debug("=========================")
-    # logging.debug("\t==> PATH = " + str(path))
-    # logging.debug("=========================")
 
     if (
         path == "o"
@@ -283,12 +256,6 @@ def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, sta
         )
     ):
         if impossible:
-            # logging.debug("impossible")
-            # logging.debug("new_start\t" + str(new_start))
-            # logging.debug("new_goal\t" + str(new_goal))
-            # # fill the matrix
-            # for line in new_maze:
-            #     logging.debug(str(line))
             return "o"
         return get_direction_from_waze_recursive(new_maze, new_maze_width, new_maze_height, new_origin, new_start, new_goal, start_position)
     else:
@@ -296,9 +263,6 @@ def get_direction_from_waze_recursive(maze, maze_width, maze_height, origin, sta
 
 
 def get_direction_from_waze(start_position, goal_position):
-    # logging.debug("start_position\t" + str(start_position))
-    # logging.debug("goal_position\t" + str(goal_position) + str("\n"))
-
     if (
         game_map[goal_position].is_occupied
         or
@@ -315,11 +279,6 @@ def get_direction_from_waze(start_position, goal_position):
         resulting_position.y,
         WIDTH - resulting_position.y
     ) + 1
-
-    # logging.debug("start_position\t" + str(start_position))
-    # logging.debug("goal_position\t" + str(goal_position))
-    # logging.debug("maze_width\t" + str(maze_width))
-    # logging.debug("maze_height\t" + str(maze_height))
 
     direction_to_position = {
         "w" : {
@@ -361,14 +320,6 @@ def get_direction_from_waze(start_position, goal_position):
     for i in range(0, maze_height):
         maze[i] = [0] * maze_width
 
-    # get positions in the matrix of start and goal
-    # logging.debug("moves\t" + str(game_map.get_unsafe_moves(start_position, goal_position)))
-    # direction0 = game_map.get_unsafe_moves(start_position, goal_position)[0]
-    # logging.debug("direction0\t" + str(direction0))
-
-    # convertion = Direction.convert(direction0)
-    # logging.debug("convertion\t" + str(convertion))
-
     start_to_goal_direction = ''.join(
         sorted(
             list(
@@ -380,25 +331,14 @@ def get_direction_from_waze(start_position, goal_position):
         )
     )
 
-    # logging.debug("start_to_goal_direction\t" + str(start_to_goal_direction))
-
-    # Direction.convert(direction)
-    # logging.debug("start_to_goal_direction\t" + str(start_to_goal_direction))
     start = direction_to_position[start_to_goal_direction]["start"]
     goal = direction_to_position[start_to_goal_direction]["goal"]
-    # [0][0] to real map Position
     origin = start_position - Position(start[1], start[0])
-    # logging.debug("origin\t" + str(origin))
-
-    # logging.debug("start\t" + str(start))
-    # logging.debug("goal\t" + str(goal))  
 
     # set 1 if the there is a ship
     for i in range(0, maze_width):
         for j in range(0, maze_height):
             position_tmp = game_map.normalize(Position(origin.x + i, origin.y + j))
-            # logging.debug("Tour " + str(game.turn_number) +"\t("+ str(position_tmp)+") ==>\t" + str(game_map[position_tmp].is_occupied))
-            # logging.debug("ship en ("+ str(origin.x + i)+","+str(origin.y + j)+") ?\t" + str(game_map[position_tmp].ship))
             if (
                 game_map[position_tmp].is_occupied
                 and
@@ -410,25 +350,7 @@ def get_direction_from_waze(start_position, goal_position):
                     in_enemy_area(position_tmp)
                 )
             ):
-                # logging.debug("\t1) SHIP")
-                # logging.debug("(j, i)\t" + str((j, i)))
-                # logging.debug("[start, goal]\t" + str([start, goal]))
-                # logging.debug("i\t" + str(i))
-                # logging.debug("j\t" + str(j))
                 maze[j][i] = 1
-
-    # if (
-    #     game_map.calculate_distance(start_position, goal_position) == 1
-    #     and
-    #     game_map[goal_position].is_occupied    
-    # ):
-    #     maze[goal[0]][goal[1]] = 1
-
-    
-    # fill the matrix
-    # for line in maze:
-    #     logging.debug(str(line))
-
 
     path = find_path_astar(
         maze, 
@@ -502,9 +424,6 @@ def get_extraction(from_position = None, with_inspiration = True):
 
 
 def numerical_superiority(from_position, area = 3):
-    # if len(enemies_ships) * 1.1 > me.get_ships():
-    #     return False
-
     coeff = 1.5 if len(me.get_ships()) < len(enemies_ships) * 1.2 else 1
     ships_around = get_ships_around(from_position, True, True, area) 
     
@@ -534,9 +453,6 @@ def get_best_dropoff(from_position):
 
 
 def get_halite_around(from_position, area):
-    # logging.debug("get_halite_around")
-    # logging.debug("from_position " + str(from_position) )
-
     total_halite_around = 0
 
     for i in range(from_position.x - area, from_position.x + area + 1):
@@ -578,7 +494,6 @@ def get_closest_shipyard_or_dropoff(from_position, take_into_account_other_playe
     )
 
 
-# TODO: tester avec area + grand
 def can_spawn_dropoff(area = 5):
     if not (
         halite_collected_ratio < 0.65
@@ -611,8 +526,6 @@ def can_spawn_dropoff(area = 5):
 
 def apply_movement(ship, command):
     command_queue.append(command)
-    # logging.debug("command_queue")
-    # logging.debug(command_queue)
 
     # indicates that the ship has played
     ship.has_already_played = True
@@ -645,6 +558,7 @@ def apply_movement(ship, command):
         elif command[0] == "c":
             game_map[ship.position].mark_unsafe(None)
     
+
 def gaussian_kernel(gaussian_len=3, sigma=3):
     """
     Returns a 2D Gaussian kernel array.
@@ -659,8 +573,6 @@ def gaussian_kernel(gaussian_len=3, sigma=3):
     kern1d = np.diff(st.norm.cdf(x))
     kernel_raw = np.sqrt(np.outer(kern1d, kern1d))
     kernel = kernel_raw/kernel_raw.sum()
-    # logging.debug("gaussian_kernel")
-    # logging.debug(kernel)
     return kernel
 
 
@@ -717,6 +629,7 @@ def blur(gaussian_len=10, sigma=3):
         
     return final_blurred_matrix
 
+
 def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, position_to_match):
     """
     Returns a singular safe move towards the destination.
@@ -728,8 +641,6 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
     :param position_to_match: if we have to see if this position is attainable in 1 movement (to swap with another boat)
     :return: A direction.
     """
-
-    # logging.debug("custom_naive_navigate " + str(ship) + " _ "+ str(destination) + " _ "+ str(crash_into_shipyard) + " _ "+ str(simulate) + " _ "+ str(position_to_match))
 
     available_positions = []
     blocked_positions_because_of_an_enemy = []
@@ -748,17 +659,12 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
         ]
         close_allied_ships.remove(ship)
 
-        # logging.debug("close_enemies_ships " + str(close_enemies_ships))
-        # logging.debug("close_allied_ships " + str(close_allied_ships))
-        # logging.debug("next_positions " + str(next_positions))
-
         # if the ship must crash into the shipyard and if the ship is 1 displacement of the shipyard
         if (
             crash_into_shipyard 
             and 
             game_map.calculate_distance(ship.position, destination) == 1
         ):
-            # logging.debug("boucle29")
             available_positions.append([target_pos, direction])
         else:
             # save positions blocked by an enemy
@@ -769,16 +675,13 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
                 and
                 not target_pos in next_positions
             ):
-                # logging.debug("boucle28")
                 blocked_positions_because_of_an_enemy.append(target_pos)
 
             # else, if the position isn't occupied and not close to the enemy
             elif not game_map[target_pos].is_occupied:
-                # logging.debug("boucle27")
                 available_positions.append([target_pos, direction])
             # else, we check if the position is occupied by an allied ship
             else:
-                # logging.debug("boucle26")
                 for allied_ship in close_allied_ships:
                     # if the ship has not already played and if it's at this position
                     if (
@@ -794,7 +697,6 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
                             and
                             simulate
                             ):
-                            # logging.debug("1) \t" + str(ship.id) + " accept to swap in " + str(position_to_match))
                             return direction
 
                         elif not simulate:
@@ -809,7 +711,6 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
                             if next_simulated_allied_position == ship.position:
                                 global swapping
                                 swapping = True
-                                # logging.debug(str(ship.id) + " can swap with " + str(allied_ship.id))
                                 # mark these position as unsafe
                                 game_map[ship.position].mark_unsafe(allied_ship)
                                 game_map[target_pos].mark_unsafe(ship)
@@ -820,12 +721,10 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
                                 )
 
                                 # and returns that of the current ship
-                                # logging.debug("2) \t" + str(ship.id) + " _ direction : " + str(direction))
                                 return direction
                             
                             # if the allied ship will move by releasing the position
                             elif next_simulated_allied_position != allied_ship.position:
-                                # logging.debug("Tour " + str(game.turn_number) + "\t\t" + str(allied_ship) + " va " + str(next_simulated_allied_position) + " et libère sa place pour " + str(ship))
                                 game_map[next_simulated_allied_position].mark_unsafe(allied_ship)
                                 # apply the movement of the allied ship
                                 apply_movement(
@@ -834,10 +733,8 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
                                 )
                                 # important to mark unsafe AFTER applying the movement of the allied ship
                                 game_map[target_pos].mark_unsafe(ship)
-                                # logging.debug("6) \t" + str(ship.id) + " _ direction : " + str(direction))
                                 return direction                             
 
-    # logging.debug("len(available_positions --> " + str(len(available_positions)))
     if len(available_positions):
         sorted_positions_by_ascending_halite = sorted(
             available_positions, 
@@ -855,22 +752,14 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
             ==
             int(game_map[sorted_positions_by_ascending_halite[1][0]].halite_amount * (1 / constants.MOVE_COST_RATIO))
         ):
-            # logging.debug("if the 2nd position with the least halite costs the same cost")
-            # logging.debug(str(sorted_positions_by_ascending_halite[0][0]) + " meme cout que " + str(sorted_positions_by_ascending_halite[1][0]))
             cheapest_positions.append(sorted_positions_by_ascending_halite[1])
         
-        # logging.debug("available_positions " + str(available_positions))
-        # logging.debug("cheapest_positions : " + str(cheapest_positions))
         chosen_position = random.choice(cheapest_positions)
-        # logging.debug("chosen_position " + str(chosen_position))
         
         if not simulate:
             game_map[chosen_position[0]].mark_unsafe(ship)
-        # logging.debug("3) \t" + str(ship.id) + " _ direction : " + str(chosen_position[1]))
         return chosen_position[1]
-    
 
-    # logging.debug("len(blocked_positions_because_of_an_enemy --> " + str(len(blocked_positions_because_of_an_enemy)))
     for blocked_position in blocked_positions_because_of_an_enemy:
         if (
             numerical_superiority(blocked_position)
@@ -884,63 +773,7 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
             direction = game_map.get_unsafe_moves(ship.position, blocked_position)[0]
             if not simulate:
                 game_map[blocked_position].mark_unsafe(ship)
-            # logging.debug("Turn " + str(game.turn_number) + " - Ship " + str(ship) + " fonce dans l'ennemi en " + str(blocked_position))
-            # logging.debug("4) \t" + str(ship.id) + " _ direction : " + str(direction))            
             return direction
-
-    # logging.debug("STILL")
-
-    # if the ship can't move, we can see if it's because of an enemy 
-    # if (
-    #     ship in ships_coming_back
-    #     and
-    #     len(blocked_positions_because_of_an_enemy)
-    # ):
-    #     other_positions = []
-        # logging.debug("if ship in ships_coming_back")
-    #     for i in range(ship.position.x - 1, ship.position.x + 2):
-    #         for j in range(ship.position.y - 1, ship.position.y + 2):
-                # logging.debug("test position " + str(Position(i, j)))
-    #             # if there is a available position near
-    #             if (
-    #                 game_map.calculate_distance(ship.position, Position(i, j)) == 1
-    #                 and 
-    #                 not game_map[Position(i, j)].is_occupied
-    #             ):
-                    # logging.debug("if there is a available position near : " + str(Position(i, j)))
-    #                 in_an_enemy = False
-    #                 for enemy_ship in enemies_ships:
-    #                     if game_map.calculate_distance(enemy_ship.position, Position(i, j)) <= 1:
-    #                         in_an_enemy = True
-    #                         break
-                    # logging.debug("in_an_enemy : " + str(in_an_enemy))
-    #                 if not in_an_enemy:
-    #                     closest_shipyard_or_dropoff = get_closest_shipyard_or_dropoff(ship.position, True, False)
-    #                     # if going to this position does not move back
-    #                     if (
-    #                         not
-    #                         (
-    #                             (
-    #                                 closest_shipyard_or_dropoff.position.x == ship.position.x
-    #                                 and
-    #                                 closest_shipyard_or_dropoff.position.x == i
-    #                             )
-    #                             or
-    #                             (
-    #                                 closest_shipyard_or_dropoff.position.y == ship.position.y
-    #                                 and
-    #                                 closest_shipyard_or_dropoff.position.y == j
-    #                             )
-    #                         )
-    #                     ):
-    #                         other_positions.append(Position(i, j))
-        # logging.debug("other_positions : " + str(other_positions))
-    #     if len(other_positions):
-    #         chosen_other_position = random.choice(other_positions)
-            # logging.debug("chosen_other_position : " + str(chosen_other_position))
-    #         direction = custom_naive_navigate(ship, chosen_other_position, crash_into_shipyard, simulate, position_to_match)
-            # logging.debug("direction : " + str(direction))
-    #         return direction        
 
     if (
         not position_to_match is None
@@ -956,12 +789,7 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
         )
     ):
         direction = game_map.get_unsafe_moves(ship.position, position_to_match)[0]
-        # logging.debug("Turn " + str(game.turn_number) + "force swap - " + str(ship.id) + " in " + str(position_to_match) + " - Direction = " + str(direction))
-        # logging.debug("5) \t" + str(ship.id) + " _ direction : " + str(direction))      
         return direction
-    # elif not position_to_match is None:
-        # logging.debug(str(ship) + " refuse de swap avec " + str(game_map[position_to_match].ship))
-    
 
     waze_direction = get_direction_from_waze(
         game_map.normalize(ship.position),
@@ -971,18 +799,13 @@ def custom_naive_navigate(ship, destination, crash_into_shipyard, simulate, posi
     direction = COMMAND_TO_DIRECTION[
         waze_direction
     ]
-
-    # logging.debug("Tour " + str(game.turn_number) + "\twaze_direction\t" + str(waze_direction))
     
     if not simulate:
         game_map[game_map.normalize(ship.position.directional_offset(direction))].mark_unsafe(ship)
     
     return direction
-    # logging.debug("waze_direction\t" + str(waze_direction))
 
-    # return Direction.Still #if waze_direction is None else waze_direction
 
-# find_one[position, distance, extraction]
 def scan_area(area, position, find_one = None):       
     """
     Recursive function. Returns the position with the maximum of halite around a given position
@@ -992,10 +815,7 @@ def scan_area(area, position, find_one = None):
 
 
     # the most recent shipyard
-    # TODO: p-e faire ce traitement dans update_dropoffs_history
     try:
-        # logging.debug("dropoffs_history\t" + str(dropoffs_history))
-
         most_recent_shipyard = dropoffs_history[
             min(
                 dropoffs_history.keys(),
@@ -1003,13 +823,7 @@ def scan_area(area, position, find_one = None):
             )
         ]
 
-        # logging.debug("##################################################")
-        # logging.debug("##################################################")
-        
-        # logging.debug("game_map[position]\t" + str(game_map[position]))
         ship_id = game_map[position].ship.id
-        # logging.debug("ship_id\t" + str(ship_id))
-
 
         if (
             most_recent_shipyard["turns_ago"] < 30
@@ -1018,7 +832,6 @@ def scan_area(area, position, find_one = None):
             and
             not ship_id in most_recent_shipyard["ships_in_area"]
         ):
-            # logging.debug("regarde si plus du dropoff")
             distance_from_the_nearest_dropoff = game_map.calculate_distance(
                 get_closest_shipyard_or_dropoff(
                     position,
@@ -1041,15 +854,12 @@ def scan_area(area, position, find_one = None):
 
     except ValueError:
         pass
-        # logging.debug("ValueError dans scan_area")
-    
 
     if (
         not find_one is None
         and
         area - find_one["area"] > 5
     ):
-        # logging.debug("return find_one\t" + str(find_one))
         return find_one["position"]
 
     all_options = [];
@@ -1082,13 +892,6 @@ def scan_area(area, position, find_one = None):
             offset_y += 1
         else:
             offset_y -= 1
-
-
-    # logging.debug("_________________________________________________")
-    # logging.debug("area\t" + str(area))
-    # logging.debug("position\t" + str(position))
-    # logging.debug("len\t" + str(len(all_options)) + "\tall_options\t" + str(all_options))
-
     
     # remove if is_occupied and no enough halite 
     # and sort by halite
@@ -1112,12 +915,7 @@ def scan_area(area, position, find_one = None):
 
 
     if len(sorted_filtered_options):
-        # chosen_option = max(
-        #     filtered_sorted_options_by_descending_halite,
-        #     key=lambda p: get_halite_around(p, 5)
-        # ) 
         if find_one is None:
-            # logging.debug("ret1")
             return scan_area(
                 area + 1,
                 position,
@@ -1128,10 +926,8 @@ def scan_area(area, position, find_one = None):
                 }
             )
         else:
-            # logging.debug("< * 75\t" + str(int(game_map[sorted_filtered_options[0]].halite_amount * (1 / constants.EXTRACT_RATIO)) > find_one["extraction"] * 5))
             # if the new position is better
             if int(game_map[sorted_filtered_options[0]].halite_amount * (1 / constants.EXTRACT_RATIO)) > find_one["extraction"] * 50:
-                # logging.debug("ret2")
                 return scan_area(
                     area + 1,
                     position,
@@ -1142,7 +938,6 @@ def scan_area(area, position, find_one = None):
                     }
                 )
             else:
-                # logging.debug("ret3")
                 return scan_area(
                     area + 1,
                     position,
@@ -1153,7 +948,6 @@ def scan_area(area, position, find_one = None):
     else:
         # recall scan_area with area + 1
         if area < WIDTH:
-            # logging.debug("ret4")
             return scan_area(area + 1, position, find_one)
         else:
             return position
@@ -1172,13 +966,9 @@ def get_next_movement(current_ship, simulate, position_to_match = None):
     Returns the next movement of the current ship
     :return: a move to move this ship
     """
-    
-    # logging.debug("get_next_movement(current_ship = "+ str(current_ship) +", simulate = "+ str(simulate) +", position_to_match = "+ str(position_to_match) +")")
-    # logging.debug(str(current_ship.halite_amount) + " / " + str(constants.MAX_HALITE))
 
     # if the ship have no enough halite to move
     if not have_enough_halite_to_move(current_ship):
-        # logging.debug("boucle1")
         return current_ship.stay_still()
     
     # if the ship must move towards an anticipated dropoff
@@ -1187,34 +977,18 @@ def get_next_movement(current_ship, simulate, position_to_match = None):
         and
         current_ship.id in anticipated_dropoffs
     ):
-        # logging.debug("ship must move towards an anticipated dropoff")
         if (
             game_map.calculate_distance(
                 current_ship.position, 
                 anticipated_dropoffs[current_ship.id]
             ) == 1
         ):
-            # logging.debug("est sur le dropoff anticipé")
             return current_ship.stay_still() 
 
-        # logging.debug("doit se diriger vers le dropoff anticipé")
         max_pos = anticipated_dropoffs[current_ship.id]
-        # logging.debug("current_ship : " + str(current_ship.id))
-        # logging.debug("max_pos : " + str(max_pos))
         direction = custom_naive_navigate(current_ship, max_pos, False, simulate, position_to_match)
-        # logging.debug("direction : "+str(direction))
         movement = current_ship.move(direction)
-        # logging.debug("movement : "+str(movement))
 
-
-    # if the farthest ship starts coming back
-    # and if the ship is on the shipyard
-    elif (
-        farthest_ship_coming_back_because_of_the_time 
-        and 
-        current_ship.position == get_closest_shipyard_or_dropoff(current_ship.position).position
-        ):
-        # logging.debug("boucle2")
         return current_ship.stay_still()
 
 
@@ -1225,8 +999,6 @@ def get_next_movement(current_ship, simulate, position_to_match = None):
         and 
         game_map.calculate_distance(current_ship.position, get_closest_shipyard_or_dropoff(current_ship.position).position) == 1
         ):
-        # logging.debug("boucle3")
-        # logging.debug("elif game_map.calculate_distance(current_ship.position, me.shipyard.position) == 1")
         direction = custom_naive_navigate(current_ship, get_closest_shipyard_or_dropoff(current_ship.position).position, True, simulate, position_to_match)
         movement = current_ship.move(direction)
 
@@ -1250,20 +1022,13 @@ def get_next_movement(current_ship, simulate, position_to_match = None):
             >=
             get_extraction()
         ):
-            # logging.debug("boucle4")
             return current_ship.stay_still()
         
-        # logging.debug("boucle5")
         direction = custom_naive_navigate(current_ship, get_closest_shipyard_or_dropoff(current_ship.position).position, True, simulate, position_to_match)
         movement = current_ship.move(direction)
 
-
-
     # in ships_coming_back
     elif current_ship in ships_coming_back:
-        # logging.debug("boucle16")
-        # logging.debug("extraction possible en restant : " + str(int(current_ship.halite_amount * (1 / constants.EXTRACT_RATIO))))
-        # logging.debug("min hamlite ratio extraction : " + str(int(min_halite_to_stay * (1 / constants.EXTRACT_RATIO))))
         if (
             current_ship.halite_amount < constants.MAX_HALITE
             and 
@@ -1271,12 +1036,10 @@ def get_next_movement(current_ship, simulate, position_to_match = None):
             >=
             get_extraction()
         ):
-            # logging.debug("boucle17")
             return current_ship.stay_still()
     
         # else if the ship is full
         else:
-            # logging.debug("boucle19")
             # if the ship is one cell away from the shipyard and the shipyard is occupied
             if (
                 game_map.calculate_distance(current_ship.position, get_closest_shipyard_or_dropoff(current_ship.position).position) == 1
@@ -1285,27 +1048,21 @@ def get_next_movement(current_ship, simulate, position_to_match = None):
                 and
                 len(enemies_ships)
             ):
-                # logging.debug("boucle20")
                 go_into_the_enemy = False
                 for ship in enemies_ships:
                     # if there is a ship that is to the enemy
                     if ship.position == get_closest_shipyard_or_dropoff(current_ship.position).position:
-                        # logging.debug("boucle21")
                         go_into_the_enemy = True
                         break
 
                 direction = custom_naive_navigate(current_ship, get_closest_shipyard_or_dropoff(current_ship.position).position, go_into_the_enemy, simulate, position_to_match)
                 movement = current_ship.move(direction)
             else:
-                # logging.debug("boucle23")
                 direction = custom_naive_navigate(current_ship, get_best_dropoff(current_ship.position).position, False, simulate, position_to_match)
                 movement = current_ship.move(direction)
-    
 
     # normal ship
     else:
-        # logging.debug("boucle24")
-
         simulated_halite_amount = game_map[current_ship].halite_amount
 
         if constants.INSPIRATION_ENABLED:
@@ -1327,40 +1084,28 @@ def get_next_movement(current_ship, simulate, position_to_match = None):
                     break
             
             if enemy_ships_in_radius_count >= constants.INSPIRATION_SHIP_COUNT:
-                # logging.debug("inspiration")
                 simulated_halite_amount = int(simulated_halite_amount * (constants.INSPIRED_BONUS_MULTIPLIER + 1))
 
-        # logging.debug("simulated_halite_amount " + str(simulated_halite_amount) + " au lieu de " + str(game_map[current_ship].halite_amount))
         # if more than min_halite_to_stay halite in this case
         if (
             int(simulated_halite_amount * (1 / constants.EXTRACT_RATIO))
             >= 
             get_extraction()
         ):
-            # logging.debug("boucle25")
             return current_ship.stay_still()
 
-        # logging.debug("appel de scan_area")
         max_pos = scan_area(1, current_ship.position)
-        # logging.debug("current_ship : " + str(current_ship.id))
-        # logging.debug("max_pos : " + str(max_pos))
         direction = custom_naive_navigate(current_ship, max_pos, False, simulate, position_to_match)
-        # logging.debug("direction : "+str(direction))
         movement = current_ship.move(direction)
-        # logging.debug("movement : "+str(movement))
-
-    # logging.debug("avant impression movement")
-    # logging.debug("movement : " + str(movement))
 
     return movement
+
 
 def can_spawn_ship():
     """
     Returns true if we have to spawn a ship, false otherwise
     :return: true if we have to spawn a ship, false otherwise
     """
-
-    # logging.debug("halite_collected_ratio " + str(halite_collected_ratio))
 
     return (
         (        
@@ -1391,8 +1136,8 @@ def can_spawn_ship():
         halite_collected_ratio < 0.55
     )
 
+
 def will_have_enough_halite_to_create_a_dropoff():
-    # logging.debug("will_have_enough_halite_to_create_a_dropoff")
     # number of ships that will have returned
     nb_ships = len(ships_coming_back)
 
@@ -1402,10 +1147,8 @@ def will_have_enough_halite_to_create_a_dropoff():
         >=
         constants.DROPOFF_COST
     ):
-        # logging.debug("True")
         return True
     else:
-        # logging.debug("False")
         return False
 
 
@@ -1418,14 +1161,8 @@ def move_ships():
         swapping = False
         # if the ship has not already played
         if not ship.has_already_played:
-            # logging.debug("Tour " + str(game.turn_number) + "\t=====current_ship===== "+str(ship))
             # if the boat is on an anticipated dropoff
             # and if we have enough halite
-            # logging.debug("ship.id in anticipated_dropoffs\t" + str(ship.id in anticipated_dropoffs))
-            # if(ship.id in anticipated_dropoffs):
-                # logging.debug("anticipated_dropoffs[ship.id]\t" + str(anticipated_dropoffs[ship.id]))
-                # logging.debug("dist du point\t" + str(game_map.calculate_distance(ship.position, anticipated_dropoffs[ship.id])))
-                # logging.debug("me.halite_amount >= constants.DROPOFF_COST\t" + str(me.halite_amount >= constants.DROPOFF_COST))
             if (
                 ship.id in anticipated_dropoffs
                 and
@@ -1439,7 +1176,6 @@ def move_ships():
                 # whether this cell has no structure
                 not game_map[ship.position].has_structure
             ):
-                # logging.debug('is in anticipated dropoff and enough halite ')
                 # if we also have enough halite to spawn a ship
                 if me.halite_amount >= (constants.DROPOFF_COST + constants.SHIP_COST):
                     stop_spending_halite = False
@@ -1465,27 +1201,14 @@ def play_turn():
     """
     global stop_spending_halite 
 
-    # logging.debug("ships_on_shipyard : "+str(len(ships_on_shipyard)))
-    # logging.debug(ships_on_shipyard)
-    # logging.debug("ships_coming_back : "+str(len(ships_coming_back)))
-    # logging.debug(ships_coming_back)
-    # logging.debug("ships_default : "+str(len(ships_default)))
-    # logging.debug(ships_default)
-
-    # logging.debug("Turn " + str(game.turn_number) + "   anticipated_dropoffs = " + str(anticipated_dropoffs))
-
     clear_anticipated_dropoffs = False
     # delete the ship if it no longer exists
     for ship_id, anticipated_dropoff_position in anticipated_dropoffs.items():
         if not ship_id in me._ships:
-            # logging.debug(" delete the ship if it no longer exists")
             clear_anticipated_dropoffs = True
     
     if clear_anticipated_dropoffs:
         anticipated_dropoffs.clear()
-
-    # buf fix
-    # can_spawn_dropoff() 
 
     # if will have enough halite to create a dropoff
     # looking for the best positions to construct a dropoff
@@ -1497,7 +1220,6 @@ def play_turn():
         will_have_enough_halite_to_create_a_dropoff()
     ):
         # get all positions
-        # logging.debug("if will have enough halite to create a dropoff")
         all_positions = []
 
         enemy_shipyards = []
@@ -1510,7 +1232,6 @@ def play_turn():
             key=lambda s: game_map.calculate_distance(me.shipyard.position, s.position)
         ) 
 
-        # logging.debug("filtrage des positions assez loins et pas entre les shipyards")
         # use a step for large maps, in order to avoid a timeout  
         step = 2 if WIDTH >= 56 else 1
 
@@ -1566,14 +1287,6 @@ def play_turn():
             )
         ]
 
-
-        # logging.debug("filtered_sorted_all_positions_by_halite_around[0]\t" + str(filtered_sorted_all_positions_by_halite_around[0]))
-        # logging.debug("filtered_sorted_all_positions_by_halite_around[1]\t" + str(filtered_sorted_all_positions_by_halite_around[1]))
-        # logging.debug("filtered_sorted_all_positions_by_halite_around[2]\t" + str(filtered_sorted_all_positions_by_halite_around[2]))
-        # logging.debug("filtered_sorted_all_positions_by_halite_around[3]\t" + str(filtered_sorted_all_positions_by_halite_around[3]))
-        # logging.debug("filtered_sorted_all_positions_by_halite_around[4]\t" + str(filtered_sorted_all_positions_by_halite_around[4]))
-        # logging.debug("filtered_sorted_all_positions_by_halite_around[5]\t" + str(filtered_sorted_all_positions_by_halite_around[5]))
-
         # sort by distance
         sorted_all_positions_by_distance = sorted(
             filtered_sorted_all_positions_by_halite_around,
@@ -1584,17 +1297,6 @@ def play_turn():
             reverse=False
         ) 
         
-
-
-
-        # logging.debug("sorted_all_positions_by_distance")
-        # for g_pos in sorted_all_positions_by_distance[:10]:
-            # logging.debug(
-        #         str(g_pos) + " --> " 
-        #         + str(g_pos) + " : " 
-        #         + str(get_halite_around(g_pos, 7))
-        #     )
-
         chosen_ship = None
         chosen_position = None
 
@@ -1602,7 +1304,6 @@ def play_turn():
         for eligible_position in filtered_sorted_all_positions_by_halite_around[:(int(len(all_positions)/20))]:
             for eligible_ship in ships_default:
                 distance_tmp = game_map.calculate_distance(eligible_ship.position, eligible_position)
-                # logging.debug("for " + str(eligible_ship) + ", distance to " + str(eligible_position) + " = " + str(distance_tmp))
                 if distance_tmp <= WIDTH:
                     # if it's the first ship in the perimeter
                     # or if it's closer than chosen_ship
@@ -1625,42 +1326,31 @@ def play_turn():
             stop_spending_halite = True
             anticipated_dropoffs[chosen_ship.id] = chosen_position
 
-    # logging.debug('stop_spending_halite ' + str(stop_spending_halite))
-
     reset_stop_spending_halite = move_ships()
 
     if can_spawn_ship():
-        # logging.debug("can_spawn_ship")
         # spawn a ship (-1000 halite)
         command_queue.append(me.shipyard.spawn())
     
     if reset_stop_spending_halite:
         stop_spending_halite = False
-        # logging.debug('reset_stop_spending_halite ')
         anticipated_dropoffs.clear()
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)
     
 
-
-
-
 def fill_ship_arrays():
     global ships_coming_back 
-    # logging.debug("Dans fill_ship_arrays")
-    # logging.debug("ships_coming_back tour précédent : " + str(ships_coming_back))
 
     unsorted_ships_coming_back = []
     unsorted_ships_default = []
     
     for ship in me.get_ships():
-        # logging.debug(str(ship))
         ship.has_already_played = False
     
         # if this ship has to construct a dropoff
         if (ship.id in anticipated_dropoffs):
-            # logging.debug("fill_ship_arrays 1")
             ships_constructing_dropoff.append(ship)
         
         # time to coming back
@@ -1671,7 +1361,6 @@ def fill_ship_arrays():
             > 
             constants.MAX_TURNS - game.turn_number - OFFSET_BEFORE_COMING_BACK
         ):
-            # logging.debug("fill_ship_arrays 2")
             unsorted_ships_coming_back.append(ship)
 
         else:
@@ -1683,29 +1372,19 @@ def fill_ship_arrays():
                 
             # if it was a ship coming back during the last turn
             if is_in_ships_coming_back:
-                # logging.debug("fill_ship_arrays 3")
-                # logging.debug("ship.halite_amount / constants.MAX_HALITE : " + str(ship.halite_amount / constants.MAX_HALITE ))
-                # logging.debug("MINIMUM_HALITE_TO_BECOME_A_DEFAULT_SHIP_AGAIN : " + str(MINIMUM_HALITE_TO_BECOME_A_DEFAULT_SHIP_AGAIN ))
-                # logging.debug("ship.halite_amount / constants.MAX_HALITE < MINIMUM_HALITE_TO_BECOME_A_DEFAULT_SHIP_AGAIN : " + str(ship.halite_amount / constants.MAX_HALITE < MINIMUM_HALITE_TO_BECOME_A_DEFAULT_SHIP_AGAIN ))
                 if (
                     ship.halite_amount / constants.MAX_HALITE 
                     < 
                     MINIMUM_HALITE_TO_BECOME_A_DEFAULT_SHIP_AGAIN
                 ): 
-                    # logging.debug("fill_ship_arrays 4")
                     # it become a default ship
                     unsorted_ships_default.append(ship)
                 else:
-                    # logging.debug("fill_ship_arrays 5")
                     # it's still a ship coming back
                     unsorted_ships_coming_back.append(ship)
-            
             elif ship.position == get_closest_shipyard_or_dropoff(ship.position).position:
-                # logging.debug("fill_ship_arrays 6")
                 ships_on_shipyard.append(ship)
-
             else:
-                # logging.debug("fill_ship_arrays 7")
                 unsorted_ships_default.append(ship)
         
     # firstly the ships closest to the shipyard
@@ -1731,8 +1410,6 @@ def fill_ship_arrays():
         >
         constants.MAX_TURNS - game.turn_number - OFFSET_BEFORE_COMING_BACK)
     
-    # logging.debug("farthest_ship_coming_back_because_of_the_time = " + str(farthest_ship_coming_back_because_of_the_time))
-
     for ship in reversed(ships_default):
         # the list being sorted by increasing distance, we break the loop if the distance is greater than 1
         if game_map.calculate_distance(ship.position, get_closest_shipyard_or_dropoff(ship.position).position) > 1:
@@ -1755,8 +1432,6 @@ def update_min_halite_to_stay():
     # average halite per cell 
     avg_halite_per_cell = int(total_halite / (WIDTH * WIDTH))
 
-    # logging.debug("avg_halite_per_cell : " + str(avg_halite_per_cell))
-
     global min_halite_to_stay
     min_halite_to_stay = (avg_halite_per_cell / 2) if (avg_halite_per_cell < DEFAULT_MIN_HALITE_TO_STAY * 0.8 ) else DEFAULT_MIN_HALITE_TO_STAY
 
@@ -1768,7 +1443,6 @@ def init_default_min_halite_to_stay():
     # average halite per cell 
     avg_halite_per_cell = total_halite / (WIDTH * WIDTH)
 
-    # logging.debug("init_default_min_halite_to_stay : " + str(init_default_min_halite_to_stay))
     return int(avg_halite_per_cell / 2.5)
 
 
@@ -1804,10 +1478,6 @@ def update_dropoffs_history(area):
                 )
             }
 
-            # logging.debug("dropoffs_history[dropoff.id][ships_in_area]" + str(dropoffs_history[dropoff.id]["ships_in_area"]))
-        
-        
-
         else:
             dropoffs_history[dropoff.id]["turns_ago"] += 1
 
@@ -1822,7 +1492,7 @@ def update_dropoffs_history(area):
             True,
             area
         )
-        
+
 
 global me
 global game_map
@@ -1856,7 +1526,6 @@ target_positions = dict()
 # id -> creation turn 
 global dropoffs_history
 dropoffs_history = dict()
-
 
 # map width
 WIDTH = game.game_map.width
@@ -1896,24 +1565,22 @@ MAX_DROPOFFS = dict([
 HALITE_AT_THE_BEGINNING = count_available_halite()
 MINIMUM_HALITE_TO_BECOME_A_DEFAULT_SHIP_AGAIN = 0.5
 
-logging.debug("SHIP_COST\t" + str(constants.SHIP_COST))
-logging.debug("DROPOFF_COST\t" + str(constants.DROPOFF_COST))
-logging.debug("MAX_HALITE\t" + str(constants.MAX_HALITE))
-logging.debug("MAX_TURNS\t" + str(constants.MAX_TURNS))
-logging.debug("EXTRACT_RATIO\t" + str(constants.EXTRACT_RATIO))
-logging.debug("MOVE_COST_RATIO\t" + str(constants.MOVE_COST_RATIO))
-logging.debug("INSPIRATION_ENABLED\t" + str(constants.INSPIRATION_ENABLED))
-logging.debug("INSPIRATION_RADIUS\t" + str(constants.INSPIRATION_RADIUS))
-logging.debug("INSPIRATION_SHIP_COUNT\t" + str(constants.INSPIRATION_SHIP_COUNT))
-logging.debug("INSPIRED_EXTRACT_RATIO\t" + str(constants.INSPIRED_EXTRACT_RATIO))
+# print constants
+logging.debug("SHIP_COST\t"                 + str(constants.SHIP_COST                ))
+logging.debug("DROPOFF_COST\t"              + str(constants.DROPOFF_COST             ))
+logging.debug("MAX_HALITE\t"                + str(constants.MAX_HALITE               ))
+logging.debug("MAX_TURNS\t"                 + str(constants.MAX_TURNS                ))
+logging.debug("EXTRACT_RATIO\t"             + str(constants.EXTRACT_RATIO            ))
+logging.debug("MOVE_COST_RATIO\t"           + str(constants.MOVE_COST_RATIO          ))
+logging.debug("INSPIRATION_ENABLED\t"       + str(constants.INSPIRATION_ENABLED      ))
+logging.debug("INSPIRATION_RADIUS\t"        + str(constants.INSPIRATION_RADIUS       ))
+logging.debug("INSPIRATION_SHIP_COUNT\t"    + str(constants.INSPIRATION_SHIP_COUNT   ))
+logging.debug("INSPIRED_EXTRACT_RATIO\t"    + str(constants.INSPIRED_EXTRACT_RATIO   ))
 logging.debug("INSPIRED_BONUS_MULTIPLIER\t" + str(constants.INSPIRED_BONUS_MULTIPLIER))
-logging.debug("INSPIRED_MOVE_COST_RATIO\t" + str(constants.INSPIRED_MOVE_COST_RATIO))
+logging.debug("INSPIRED_MOVE_COST_RATIO\t"  + str(constants.INSPIRED_MOVE_COST_RATIO ))
 
 
 while True:
-    # logging.debug("")
-    # logging.debug("")
-    # logging.debug("")
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
     game.update_frame()
@@ -1927,9 +1594,6 @@ while True:
 
     update_min_halite_to_stay()
     halite_collected_ratio = update_halite_collected_ratio()
-
-    # logging.debug("min_halite_to_stay " + str(min_halite_to_stay))
-    # logging.debug("____________________ ")
 
     enemies_ships = []
     next_dropoffs = []
@@ -1946,9 +1610,5 @@ while True:
 
     update_dropoffs_history(5)
 
-    # logging.debug("ships_default = " + str(ships_default))
-
-    #gaussian_blur_map = blur(10, 4)
-     
     # play turn
     play_turn()
