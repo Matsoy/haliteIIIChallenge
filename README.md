@@ -23,6 +23,6 @@ Halite (https://halite.io) est un défi d'intelligence artificielle open source,
 - Top 4% :earth_americas: : 146/4014 
 - Top 2% :fr: : 2/111
 
-```math
-$\alpha$
-```
+$ \sum_{\forall i}{x_i^{2}} $
+
+ h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
