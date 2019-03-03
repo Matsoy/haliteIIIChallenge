@@ -7,6 +7,9 @@ Halite (https://halite.io) is an open source artificial intelligence challenge, 
 ```
 
 *Final ranking* : :boom: https://halite.io/user/?user_id=2817 :boom:
+- Score : 40.27
+- <sub>&micro;</sub> : 40.71
+- <sub>&sum;</sub> : 0.15
 - Top 4% :earth_americas: : 146/4014 
 - Top 2% :fr: : 2/111
 
@@ -20,9 +23,8 @@ Halite (https://halite.io) est un défi d'intelligence artificielle open source,
 ```
 
 *Classement final* : :boom: https://halite.io/user/?user_id=2817 :boom:
+- Score : 40.27
+- <sub>&micro;</sub> : 40.71
+- <sub>&sum;</sub> : 0.15
 - Top 4% :earth_americas: : 146/4014 
 - Top 2% :fr: : 2/111
-
-$ \sum_{\forall i}{x_i^{2}} $
-
- h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
