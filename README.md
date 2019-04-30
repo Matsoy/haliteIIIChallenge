@@ -6,7 +6,7 @@ Halite (https://halite.io) is an open source artificial intelligence challenge, 
 . run_20_games_2v2.sh
 ```
 
-*Final ranking* : :boom: https://halite.io/user/?user_id=2817 :boom:
+*Final ranking* : :boom: https://2018.halite.io/user/?user_id=2817 :boom:
 - Score : 40.27
 - <sub>&micro;</sub> : 40.71
 - <sub>&sum;</sub> : 0.15
@@ -22,7 +22,7 @@ Halite (https://halite.io) est un défi d'intelligence artificielle open source,
 . run_20_games_2v2.sh
 ```
 
-*Classement final* : :boom: https://halite.io/user/?user_id=2817 :boom:
+*Classement final* : :boom: https://2018.halite.io/user/?user_id=2817 :boom:
 - Score : 40.27
 - <sub>&micro;</sub> : 40.71
 - <sub>&sum;</sub> : 0.15
