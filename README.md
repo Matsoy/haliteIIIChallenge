@@ -1,6 +1,14 @@
 # haliteIIIChallenge
 Halite (https://halite.io) is an open source artificial intelligence challenge, created by Two Sigma.
 
+<p align="center">
+  <img src="img/leaderboard.PNG">
+</p>
+
+<p align="center">
+  <img src="img/game.PNG">
+</p>
+
 *Run 20 games on random sized maps between the "MyBot" bot and himself (Linux)*
 ```shell
 . run_20_games_2v2.sh
